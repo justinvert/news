@@ -19,11 +19,15 @@ http://localhost:3000/data
 ```
 This will get the Title, URL and News Excerpt from the linked page.
 
+![Image](images/article.png)
+
 The user can save an article they like and view all the ones they have already saved at:
 ```
 http://localhost:3000/saved
 ```
 The user is able to delete any articles they choose from this page as well.
+
+![Image](images/article-2.png)
 
 ### Resources used
 * [NodeJS](https://nodejs.org/en/)
