@@ -38,7 +38,7 @@ mongoose.connect(MONGODB_URI);
 var db = require('./models');
 app.get("/data", function(req, res) {
   
-    request(" ", function(error, response, html) {
+    request("https://www.cbr.com/", function(error, response, html) {
       
         var $ = cheerio.load(html);
     
