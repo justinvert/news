@@ -1,6 +1,8 @@
 ## News Collector App
 **Live demo** hosted on [Heroku](https://www.heroku.com)
 
+_Currently Offline_
+
 Objectives:
 1. Collect news articles from a specific site and place them on the page.
 2. Once they are on the page, the user has the option to save an article.
