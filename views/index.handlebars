@@ -1,8 +1,12 @@
 <div class="container text-center">
+   <a class="btn btn-primary" id="news" role="button" href="/data">Collect News Data</a>
     <i>Test</i>
  <div class="row">
     {{#each article}}
         <h4>{{this.title}}</h4>
+           <form method="POST" action="/articles/save/{{this._id}}?_method=PUT">
+           <button type="submit" class="button btn btn-warning">Choose</button>
+           </form>
     {{/each}}
   </div>
 </div>

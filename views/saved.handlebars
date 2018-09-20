@@ -1,0 +1,8 @@
+
+    {{#each article}}
+        <h4>{{this.title}}</h4>
+               <form method="POST"  action="/articles/delete/{{this._id}}?_method=DELETE">
+           <button type="submit" class="button btn btn-warning">Choose</button>
+           </form>
+    {{/each}}
+

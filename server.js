@@ -59,6 +59,33 @@ app.get("/data", function(req, res) {
 });
 
 
+app.post("/articles/save/:id", function(req, res) {
+    db.Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
+    
+    
+    .exec(function(err, doc) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        res.redirect('/');
+      }
+    });
+});
+
+app.post("/articles/delete/:id", function(req, res) {
+    db.Article.findOneAndRemove({ "_id": req.params.id }, { "saved": false})
+    .exec(function(err, doc) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+             res.redirect('/saved');
+      }
+  
+    });
+});
+
 app.get("/", function(req, res) {
    db.Article.find({"saved": false}, function(error, data) {
     var handlebarsContent = {
@@ -70,6 +97,29 @@ app.get("/", function(req, res) {
       res.render("index", handlebarsContent);
     });
   });
+
+  app.get("/saved", function(req, res) {
+    db.Article.find({"saved": true}, function(error, data) {
+     var handlebarsContent = {
+         article: data
+       };
+ 
+       console.log(handlebarsContent);
+ 
+       res.render("saved", handlebarsContent);
+     });
+   });
+
+app.get("/articles", function(req, res) {
+  db.Article.find({})
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+   
 
 require("./routes/handlebarsRoutes")(app);
 module.exports = app;
