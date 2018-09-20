@@ -1,8 +1,29 @@
 
-    {{#each article}}
+    {{!-- {{#each article}}
         <h4>{{this.title}}</h4>
-               <form method="POST"  action="/articles/delete/{{this._id}}?_method=DELETE">
-           <button type="submit" class="button btn btn-warning">Choose</button>
-           </form>
-    {{/each}}
+               <form method="POST"  action="/articles/delete/{{this._id}}?_method=POST">
+                          {{!-- <form method="POST"  action="/articles/delete/{{this._id}}?_method=PUT"> --}}
 
+           {{!-- <button type="submit" class="button btn btn-warning">Choose</button>
+           </form>
+    {{/each}} --}} 
+
+ {{#each article}}
+<div class="card">
+  <div class="card-header">
+  
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{this.title}}</h5>
+    <div class="btn-group">
+    <a href="{{this.link}}" class="btn btn-primary">Leave a comment</a>
+
+         <form method="POST"  action="/articles/delete/{{this._id}}?_method=POST">
+           <button type="submit" class="button btn btn-warning">Delete Article</button>
+           </form>
+    </div>
+  </div>
+
+</div>
+  </br>
+    {{/each}}

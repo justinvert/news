@@ -7,6 +7,9 @@ var request = require("request");
 var cheerio = require("cheerio");
 var logger = require("morgan");
 var axios = require("axios");
+var methodOverride = require('method-override');
+
+
 
 var PORT = 3000;
 
@@ -18,50 +21,92 @@ var collections = ["Article"];
 app.use(logger("dev"));
 app.use(express.static("public"));
 
+// app.use(methodOverride('_method'));
+
 app.engine("handlebars", exphbs({ defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/testing";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/test";
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 var db = require('./models');
-
 app.get("/data", function(req, res) {
-  axios.get(" ").then(function(response) {
-    var $ = cheerio.load(response.data);
+  
+    request(" ", function(error, response, html) {
+      
+        var $ = cheerio.load(html);
+    
+      //   $(".page-title").each(function(i, element) {
+          $(".info-wrapper").each(function(i, element) {
+          var title = $(element).children("strong").text();
+          var link = $(element).children().children("a").attr("href");
+          var text = $(element).children().children().children("excerpt").text();
+          // var text = $(element).children().children().children().attr("srcset");
+  
+        var result = {
+          title: title,
+          link: link,
+          text: text,
+          saved: false
 
-    $("article h2").each(function(i, element) {
-      var result = {};
-
-      result.title = $(this)
-        .children("a")
-        .text();
-      result.link = $(this)
-        .children("a")
-        .attr("href");
-
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          return res.json(err);
+        }
+        
+        console.log(result);
+        
+        db.Article.findOne({title:title}).then(function(data) {
+          
+          console.log(data);
+  
+          if(data === null) {
+  
+            db.Article.create(result).then(function(article) {
+              res.json(article);
+            });
+          }
+        }).catch(function(err) {
+            res.json(err);
         });
+  
+      });
+      res.redirect('/');
     });
-
-    res.redirect('/');
   });
-});
+
+// app.get("/data", function(req, res) {
+//   axios.get(" ").then(function(response) {
+//     var $ = cheerio.load(response.data);
+
+//     $("article h2").each(function(i, element) {
+//       var result = {};
+
+//       result.title = $(this)
+//         .children("a")
+//         .text();
+//       result.link = $(this)
+//         .children("a")
+//         .attr("href");
+
+//       db.Article.create(result)
+//         .then(function(dbArticle) {
+//           console.log(dbArticle);
+//         })
+//         .catch(function(err) {
+//           return res.json(err);
+//         });
+//     });
+
+//     res.redirect('/');
+//   });
+// });
 
 
 app.post("/articles/save/:id", function(req, res) {
     db.Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
-    
     
     .exec(function(err, doc) {
       if (err) {
