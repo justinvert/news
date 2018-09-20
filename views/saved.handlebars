@@ -15,13 +15,28 @@
   </div>
   <div class="card-body">
     <h5 class="card-title">{{this.title}}</h5>
+    <p class="card-text">{{this.text}}</p>
+    Previous comments:
+  
+          {{this.note}}
+          
+          </br> </br>
     <div class="btn-group">
-    <a href="{{this.link}}" class="btn btn-primary">Leave a comment</a>
+    <a href="{{this.link}}" class="btn btn-primary">Article Link</a>
 
          <form method="POST"  action="/articles/delete/{{this._id}}?_method=POST">
            <button type="submit" class="button btn btn-warning">Delete Article</button>
            </form>
+
+          
     </div>
+ 
+     <form method="POST"  action="/note/save/{{this._id}}?_method=POST">
+         </br>
+   <label for="comments">Leave a comment below:</label>
+    <input type="text" class="form-control">
+           <button type="submit" class="button btn btn-success">Submit</button>
+           </form>
   </div>
 
 </div>

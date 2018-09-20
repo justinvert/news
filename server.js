@@ -7,6 +7,7 @@ var request = require("request");
 var cheerio = require("cheerio");
 var logger = require("morgan");
 var axios = require("axios");
+var Note = require("./models/Note.js");
 var methodOverride = require('method-override');
 
 
@@ -45,7 +46,7 @@ app.get("/data", function(req, res) {
           $(".info-wrapper").each(function(i, element) {
           var title = $(element).children("strong").text();
           var link = $(element).children().children("a").attr("href");
-          var text = $(element).children().children().children("excerpt").text();
+          var text = $(element).children(".details").children(".excerpt").text();
           // var text = $(element).children().children().children().attr("srcset");
   
         var result = {
@@ -129,6 +130,34 @@ app.post("/articles/delete/:id", function(req, res) {
       }
   
     });
+});
+
+
+app.post("/note/save/:id", function(req, res) {
+  var createNote = new Note(req.body);
+ createNote.save(function (error, doc) {
+        if (error) {
+     res.send(error);
+        }
+        else {
+            // db.Note.findOneAndUpdate({
+            db.Article.findOneAndUpdate({
+                "_id": req.params.id
+            }, {
+                $push: {
+                "note": doc._id
+                }
+            }, {
+                new: true
+            }, function (err, doc) {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+          res.redirect('/saved');
+                }
+            }); }
+});
 });
 
 app.get("/", function(req, res) {
